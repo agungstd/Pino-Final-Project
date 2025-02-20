@@ -1,5 +1,4 @@
 import express from "express";
-const routes = express.Router();
 import {
   errorHandling,
   isLoggedIn,
@@ -9,16 +8,24 @@ import {
 } from "../controllers/register.js";
 import { login, loginView, logout } from "../controllers/login.js";
 
+const routes = express.Router();
+
+// Root route
 routes.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+// Authentication routes
 routes.get("/signup", viewSignup);
 routes.post("/signup", signup);
-routes.get("/protected-page", isLoggedIn, protectedPage);
 routes.get("/login", loginView);
 routes.post("/login", login);
 routes.get("/logout", logout);
+
+// Protected routes
+routes.get("/protected-page", isLoggedIn, protectedPage);
+
+// Error handling middleware for protected page
 routes.use("/protected-page", errorHandling);
 
 export default routes;
